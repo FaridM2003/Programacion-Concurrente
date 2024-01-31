@@ -1,17 +1,18 @@
 package com.project1;
 
 import java.awt.Color;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.spire.pdf.*;
+
 import com.spire.pdf.graphics.PdfImage;
 
+import com.spire.pdf.PdfDocument;
 import java.awt.image.BufferedImage;
 import java.io.File;
+
 
 
 
@@ -28,7 +29,17 @@ import java.io.File;
             
         }
 
-        private void iniciar(){
+        JTextField TextF1 = new JTextField();
+        JPasswordField TextF2 = new JPasswordField();
+        public String getField(){
+            return TextF1.getText();
+        }
+        public String getField1(){
+            char[] charArray = TextF2.getPassword();
+            String textoPass = new String(charArray);
+            return textoPass;
+        }
+        public void iniciar(){
             //Variables
             JFrame ventana2 = new JFrame("Convertidor de PNG a PDF");
 
@@ -42,7 +53,6 @@ import java.io.File;
             this.getContentPane().add(pane);
             ventana2.getContentPane().add(Vpane);
 
-
             //etiquetas
             JLabel etiqueta1 = new JLabel("Nombre de usuario");
             JLabel etiqueta2 = new JLabel("Contraseña");
@@ -54,8 +64,7 @@ import java.io.File;
             pane.add(etiqueta2);
 
             //caja de texto
-            JTextField TextF1 = new JTextField();
-            JPasswordField TextF2 = new JPasswordField();
+           
             TextF1.setBounds(10,50,200,20);
             TextF2.setBounds(250,50,200,20);
             pane.add(TextF1);
@@ -100,22 +109,24 @@ import java.io.File;
             TextF2.getDocument().addDocumentListener(documentListener);
 
             button1.addActionListener(e -> {
+                mysql v2 = new mysql();
+                
+                //boolean si = false;
+                 v2.conMysql();
+                //if (si == true){
                 ventana2.setSize(400, 300);
                 ventana2.setDefaultCloseOperation(EXIT_ON_CLOSE); // Cierra solo la ventana actual, no termina la aplicación
                 ventana2.setVisible(true);
                 this.setVisible(false);
-                
+                 //   }else{
+                        JOptionPane.showMessageDialog(null, "Usuario o contraseña erroneos");
+                 //   }
               });
               Vbutton1.addActionListener(e -> {
                 ventana2.setVisible(false);
                 this.setVisible(true);
                 
               });
-
-
-
-
-
                 // Funcion de convertidor de imagen a pdf
                 actionB.addActionListener(e -> {
                     JFileChooser fileChooser = new JFileChooser();
@@ -131,25 +142,22 @@ import java.io.File;
                             for (File file : selectedFiles) {
                                 BufferedImage image = ImageIO.read(file);
                                 PdfImage pdfImage = PdfImage.fromImage(image);
-                                PdfImage.setScale(1.0);
                                 document.getPages().add().getCanvas().drawImage(pdfImage, 0, 0);
                             }
                             String texts = JOptionPane.showInputDialog("Agrega un nombre al archivo");
                             String savePath = "export/"+texts+".pdf"; // Reemplaza esto con la ruta y nombre de archivo deseado 
                             document.saveToFile(savePath);
                             document.close();
-                            System.out.println("Las imágenes se han convertido a PDF exitosamente y se han guardado en la carpeta especificada.");
+                            JOptionPane.showMessageDialog(null, "Las imágenes se han convertido a PDF exitosamente y se han guardado en la carpeta especificada.");
                         } catch (Exception ex) {
                             System.out.println("Error al procesar las imágenes: " + ex.getMessage());
+                            JOptionPane.showMessageDialog(null, "Error al procesar las imágenes: " + ex.getMessage());
                         }
                     } else {
                         System.out.println("No se seleccionaron imágenes para convertir.");
                     }
                     
                   });
-
-
-                 
             }
 
     }
