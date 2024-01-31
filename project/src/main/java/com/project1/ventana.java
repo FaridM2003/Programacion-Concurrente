@@ -1,15 +1,17 @@
 package com.project1;
 
 import java.awt.Color;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import com.spire.pdf.PdfDocument;
-import com.spire.pdf.PdfPageBase;
+
+import com.spire.pdf.*;
 import com.spire.pdf.graphics.PdfImage;
 
-import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 
 
@@ -116,21 +118,38 @@ import java.awt.geom.Rectangle2D;
 
                 // Funcion de convertidor de imagen a pdf
                 actionB.addActionListener(e -> {
-                    JFrame frame = new JFrame();
-                    JFileChooser fileChooser = new JFileChooser();// Crear nueva instancia de JFileChooser
-                    FileNameExtensionFilter filter = new FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif");// Limitar la selección a archivos de imagen
-                    fileChooser.setFileFilter(filter);
-    
-                    int result = fileChooser.showOpenDialog(frame);// Mostrar el dialogo de exploración de archivos
-                    // Si se selecciona un archivo
-                    if (result == JFileChooser.APPROVE_OPTION) {
-                    java.io.File selectedFile = fileChooser.getSelectedFile(); // Obtiene el archivo seleccionado
-                    System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-                } else {  System.out.println("No file selected"); }
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Selecciona las imágenes");
+                    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    fileChooser.setMultiSelectionEnabled(true);
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de imagen", "jpg", "png"));
+                    int userSelection = fileChooser.showOpenDialog(null);
+                    if (userSelection == JFileChooser.APPROVE_OPTION) {
+                        File[] selectedFiles = fileChooser.getSelectedFiles();
+                        try {
+                            PdfDocument document = new PdfDocument();
+                            for (File file : selectedFiles) {
+                                BufferedImage image = ImageIO.read(file);
+                                PdfImage pdfImage = PdfImage.fromImage(image);
+                                PdfImage.setScale(1.0);
+                                document.getPages().add().getCanvas().drawImage(pdfImage, 0, 0);
+                            }
+                            String texts = JOptionPane.showInputDialog("Agrega un nombre al archivo");
+                            String savePath = "export/"+texts+".pdf"; // Reemplaza esto con la ruta y nombre de archivo deseado 
+                            document.saveToFile(savePath);
+                            document.close();
+                            System.out.println("Las imágenes se han convertido a PDF exitosamente y se han guardado en la carpeta especificada.");
+                        } catch (Exception ex) {
+                            System.out.println("Error al procesar las imágenes: " + ex.getMessage());
+                        }
+                    } else {
+                        System.out.println("No se seleccionaron imágenes para convertir.");
+                    }
                     
                   });
-               
-                
+
+
+                 
             }
 
     }
