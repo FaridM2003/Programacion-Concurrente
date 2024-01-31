@@ -111,16 +111,16 @@ import java.io.File;
             button1.addActionListener(e -> {
                 mysql v2 = new mysql();
                 
-                //boolean si = false;
-                 v2.conMysql();
-                //if (si == true){
+                boolean si = false;
+                si = v2.conMysql();
+                if (si == true){
                 ventana2.setSize(400, 300);
                 ventana2.setDefaultCloseOperation(EXIT_ON_CLOSE); // Cierra solo la ventana actual, no termina la aplicación
                 ventana2.setVisible(true);
                 this.setVisible(false);
-                 //   }else{
+                   }else{
                         JOptionPane.showMessageDialog(null, "Usuario o contraseña erroneos");
-                 //   }
+                   }
               });
               Vbutton1.addActionListener(e -> {
                 ventana2.setVisible(false);

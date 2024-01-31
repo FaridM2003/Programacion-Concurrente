@@ -18,39 +18,34 @@ public class mysql {
           
                     // A partir de aquí, puedes llevar a cabo operaciones en la base de datos utilizando la conexión
                             ventana v1 = new ventana();
-                        boolean r = consultar(connection, v1.getField(), v1.getField1());
+                        Statement statement = connection.createStatement();
+                        String sql = "SELECT * FROM usuarios where usuario ="+v1.getField()+"' and contraseña ='"+v1.getField1()+"';";
+                       ResultSet resultSet = statement.executeQuery(sql);
+                       statement = connection.prepareStatement(sql);
+
+                       ((PreparedStatement) statement).setString(1, v1.getField());
+                       ((PreparedStatement) statement).setString(2, v1.getField1());
+                       if (resultSet.next()) {
+                        System.out.println("Usuario autenticado");
+                        resultSet.close();
+                        statement.close();
+                        } else {
+                         System.out.println("Credenciales incorrectas");
+                        }
+                            resultSet.close();
+                            statement.close();
+
+
+
 
 
                         connection.close();
-                        return r;
+                        return true;
                         } catch (SQLException e) {
                             System.out.println("Error al conectar a la base de datos: " + e.getMessage());
                         }
                         return false;
                     }
-
-            public boolean consultar(Connection connection, String username, String contra) throws SQLException{
-
-                 Statement statement = connection.createStatement();
-                 String sql = "SELECT * FROM usuarios where usuario = '"+username+"' and contraseña = '"+contra+"';";
-                ResultSet resultSet = statement.executeQuery(sql);
-                
-      
-             statement = connection.prepareStatement(sql);
-             ((PreparedStatement) statement).setString(1, username);
-             ((PreparedStatement) statement).setString(2, contra);
-                if (resultSet.next()) {
-                    System.out.println("Usuario autenticado");
-                    resultSet.close();
-                    statement.close();
-                    return true;
-                } else {
-                    System.out.println("Credenciales incorrectas");
-              }
-                resultSet.close();
-                statement.close();
-                return false;
-            }
                 }
     
       
