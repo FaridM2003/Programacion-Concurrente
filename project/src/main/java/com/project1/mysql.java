@@ -11,7 +11,7 @@ public class mysql {
                     String username = "root";
             public boolean conMysql(){
                 
-                     String password = "Esoterismo2001";
+                     String password = "";
                     try {
                         Connection connection = DriverManager.getConnection(url, username, password);
                         System.out.println("Conexión exitosa a la base de datos");
