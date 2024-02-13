@@ -12,6 +12,7 @@ CREATE TABLE usuarios (
   categorias_id INT(255) NOT NULL FOREING KEY categorias_id REFERENCES categorias(id);
 )
 INSERT INTO usuarios (usuario, contraseña, categoría_id)
-VALUES ("juanperez", "123456", 1),
+VALUES ("juanperez", "
+", 1),
 ("mariagarcia", "654321", 2),
 ("pedrolopez", "789012", 3);
