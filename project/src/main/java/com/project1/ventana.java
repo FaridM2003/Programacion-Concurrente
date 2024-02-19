@@ -2,17 +2,11 @@ package com.project1;
 
 import java.awt.Color;
 import javax.swing.*;
+
 import javax.swing.event.*;
     
     public class ventana extends JFrame{
-            public ventana(){
-                this.setSize(600,300);
-                setDefaultCloseOperation(EXIT_ON_CLOSE);
-                setTitle("Convertidor de archivo PNG a PDF");
-                setLocation(WIDTH, HEIGHT);
-                this.iniciar();
-            }
-
+        
         JTextField TextF1 = new JTextField();
         JPasswordField TextF2 = new JPasswordField();
             public String getField(){
@@ -23,13 +17,24 @@ import javax.swing.event.*;
                 String textoPass = new String(charArray);
                 return textoPass;
             }
+
+
+            public ventana(){
+                this.setSize(550,200);
+                setDefaultCloseOperation(EXIT_ON_CLOSE);
+                setTitle("Convertidor de archivo PNG a PDF");
+                setLocation(WIDTH, HEIGHT);
+               
+                this.iniciar();
+            }
+
             public void iniciar(){
                     //Variables
                     menuPDF ventana2 = new menuPDF();
                     //paneless
                     JPanel pane = new JPanel();
                     pane.setLayout(null);
-                
+                    pane.setBackground(Color.GRAY);
                     this.getContentPane().add(pane);
             
  
@@ -53,8 +58,7 @@ import javax.swing.event.*;
                     button1.setBounds(400,100,100,20);
                     button1.setEnabled(false);
                     pane.add(button1);
-
-
+              
                     //Funciones complejas
                    DocumentListener documentListener = new DocumentListener() {
                     public void changedUpdate(DocumentEvent e) {
