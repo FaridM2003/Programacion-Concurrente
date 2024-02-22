@@ -1,62 +1,105 @@
 package com.project1;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
+import java.sql.SQLException;
+
+import javax.swing.*;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
 import com.lowagie.text.Document;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.PdfWriter;
 public class menuPDF extends JFrame {
+     String usuari;
+    public void AgregarUsuario(String AgregarUsuario){
+        usuari = AgregarUsuario;
+        System.out.println(usuari);
+        iniciar();
+    }
+    ImageIcon imagen1 = new ImageIcon("images/background3.jpeg");
         public menuPDF(){
-            this.setSize(400,400);
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
-            setTitle("Convertidor de archivo PNG a PDF");
-            setLocation(WIDTH, HEIGHT);
-            this.iniciar();
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                System.out.println("Error al establecer el look and feel: " + e);
+            }
+            setSize(600,600);
+                setDefaultCloseOperation(EXIT_ON_CLOSE);
+                setTitle("Convertidor de archivo PNG a PDF");
+                setLocationRelativeTo(null);
+                setResizable(false);
+                setLayout(new GridLayout(1, 1));
+                java.awt.Image image = imagen1.getImage();
+                java.awt.Image image1 = image.getScaledInstance(getWidth(), getHeight(),java.awt.Image.SCALE_SMOOTH);
+                ImageIcon newImageIcon = new ImageIcon(image1);
+                    JLabel background = new JLabel(newImageIcon, JLabel.CENTER);
+                    add(background);
+            System.out.println(usuari);
         
     }
         public void iniciar(){
-           try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            System.out.println("Error al establecer el look and feel: " + e);
-        }
-            JPanel Vpane = new JPanel();
-            Vpane.setBackground(Color.GRAY);
-            Vpane.setLayout(null);
-            this.getContentPane().add(Vpane);
-            JButton Vbutton1 = new JButton();
-            JButton actionB = new JButton();
-            Vbutton1.setText("Cerrar");
-            actionB.setText("Examinar");
-            Vbutton1.setBounds(200,300,100,20);
-            actionB.setBounds(100,300,100,20);
-            Vpane.add(Vbutton1);
-            Vpane.add(actionB);
-
+            System.out.println(usuari);
         
-            Vbutton1.addActionListener(e -> {
+            JPanel p1 = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    g.setColor(new Color(11, 14, 21)); // Establecer el color de fondo con opacidad
+                    g.fillRect(0, 0, getWidth(), getHeight());
+                }};
+                p1.setOpaque(false);
+                p1.setLayout(null);
+                add(p1);
+                Font font2 = new Font("Verdana", Font.BOLD, 14);
+            JButton cerrarVentana = new JButton("Cerrar");
+            JButton ExaminarBtton = new JButton("Examinar");
+            JLabel textoUser = new JLabel("Bienvenido, "+usuari);
+            textoUser.setForeground(new Color(222, 169, 124));
+            cerrarVentana.setBounds(40,300,210,25);
+            textoUser.setBounds(75, 100, 300, 60);
+            ExaminarBtton.setBounds(40,150,210,25);
+            cerrarVentana.setFont(font2);
+            ExaminarBtton.setFont(font2);
+            textoUser.setFont(font2);
+            p1.add(cerrarVentana);
+            p1.add(ExaminarBtton);
+            p1.add(textoUser);
+        
+            cerrarVentana.addActionListener(e -> {
                 ventana v1 = new ventana();
                 this.setVisible(false);
                 v1.setVisible(true);
               });
             // Funcion de convertidor de imagen a pdf
-            actionB.addActionListener(e -> {
+            ExaminarBtton.addActionListener(e -> {
+                String exec ="usuario"; 
+                mysql n = new mysql();
+                try {
+                    exec = n.obtenerTipoUsuario(usuari);
+                } catch (SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+                int limiteArchivos = (exec.equals("usuario")) ? 150 : 0;
+
                     JFileChooser fileChooser = new JFileChooser();
                     fileChooser.setMultiSelectionEnabled(true);
                     FileNameExtensionFilter filter = new FileNameExtensionFilter("Image files", "jpg", "jpeg", "png");
                     fileChooser.setFileFilter(filter);
                     int returnValue = fileChooser.showOpenDialog(null);
                     if (returnValue == JFileChooser.APPROVE_OPTION) {
+                        if (fileChooser.getSelectedFiles().length > limiteArchivos && fileChooser.getSelectedFiles().length!=0) {
+                            JOptionPane.showMessageDialog(null, "Ha excedido el límite de archivos permitidos.");
+ 
+                            cerrarVentana.getActionListeners();
+                        } else {
+                            
+                            JOptionPane.showMessageDialog(null, "Archivos seleccionados correctamente.");
+                        }
                     File[] selectedFiles = fileChooser.getSelectedFiles();
             try {
                 Document document = new Document();
