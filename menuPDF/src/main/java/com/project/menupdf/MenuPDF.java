@@ -3,22 +3,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.project.menupdf;
-
 import ConvertidorPDF.AgregarImagenes;
-import javax.swing.UIManager;
+
+import java.awt.*;
+import javax.swing.*;
+
 
 /**
  *
  * @author Tibu
  */
 public class MenuPDF extends javax.swing.JFrame {
-
+    AgregarImagenes Imagenes = new AgregarImagenes();
+    JPanel primeraTablaImagenes = new JPanel(new GridLayout(0, 3));
     /**
      * Creates new form mainMenuPDF
      */
     public MenuPDF() {
         initComponents();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,13 +35,22 @@ public class MenuPDF extends javax.swing.JFrame {
 
         AgregarImagenes = new javax.swing.JButton();
         CerrarPrograma = new javax.swing.JButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        BotonBorraTodo = new javax.swing.JButton();
+        acciones = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         JMenuLogIn = new javax.swing.JMenu();
         JMenuAdministrador = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+        addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                formPropertyChange(evt);
+            }
+        });
 
         AgregarImagenes.setText("Agregar");
         AgregarImagenes.addActionListener(new java.awt.event.ActionListener() {
@@ -53,20 +66,41 @@ public class MenuPDF extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        BotonBorraTodo.setText("Borrar Todo");
+        BotonBorraTodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonBorraTodoActionPerformed(evt);
+            }
+        });
+
+        acciones.setText("Boton");
+        acciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accionesActionPerformed(evt);
+            }
+        });
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 517, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 257, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                .addContainerGap())
         );
-
-        jTabbedPane1.addTab("tab1", jPanel1);
 
         JMenuLogIn.setText("Iniciar Sesion");
         jMenuBar1.add(JMenuLogIn);
@@ -85,38 +119,59 @@ public class MenuPDF extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(AgregarImagenes)
+                        .addGap(76, 76, 76)
+                        .addComponent(acciones)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(CerrarPrograma))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 99, Short.MAX_VALUE)))
+                        .addGap(20, 20, 20)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(BotonBorraTodo)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1)
-                .addGap(18, 18, 18)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(BotonBorraTodo))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AgregarImagenes)
-                    .addComponent(CerrarPrograma))
+                    .addComponent(CerrarPrograma)
+                    .addComponent(acciones))
                 .addGap(15, 15, 15))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void CerrarProgramaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarProgramaActionPerformed
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_CerrarProgramaActionPerformed
 
     private void AgregarImagenesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarImagenesActionPerformed
-      AgregarImagenes f = new AgregarImagenes();
-      f.Agregar();
+     Imagenes.Agregar();
     }//GEN-LAST:event_AgregarImagenesActionPerformed
+
+    private void BotonBorraTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBorraTodoActionPerformed
+     Imagenes.borrarTodo();
+    }//GEN-LAST:event_BotonBorraTodoActionPerformed
+
+    private void formPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_formPropertyChange
+
+    }//GEN-LAST:event_formPropertyChange
+
+    private void accionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accionesActionPerformed
+
+    }//GEN-LAST:event_accionesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -150,6 +205,7 @@ public class MenuPDF extends javax.swing.JFrame {
             } catch (Exception e) {
                 System.out.println("Error al establecer el look and feel: " + e);
             }
+            
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -160,11 +216,14 @@ public class MenuPDF extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AgregarImagenes;
+    private javax.swing.JButton BotonBorraTodo;
     private javax.swing.JButton CerrarPrograma;
     private javax.swing.JMenu JMenuAdministrador;
     private javax.swing.JMenu JMenuLogIn;
+    private javax.swing.JButton acciones;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
